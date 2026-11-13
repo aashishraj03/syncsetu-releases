@@ -103,7 +103,6 @@
   .hint { color: var(--muted); font-size: 0.95rem; margin: 12px 0 0; text-align: center; }
   .hint strong { color: var(--ink); }
   .cmd-label { font-weight: 700; margin: 0 0 8px; }
-  .cmd-label + .cmd { margin-bottom: 20px; }
   h2 { font-size: 1.25rem; margin: 56px 0 8px; }
 
   /* Terminal command box */
@@ -242,16 +241,7 @@
 
   <!-- WINDOWS -->
   <section id="panel-windows" role="tabpanel" aria-labelledby="tab-windows" data-panel="windows" hidden>
-    <p class="cmd-label">If you opened Command Prompt (cmd)</p>
-    <div class="cmd">
-      <code id="win-cmd-cmd">powershell -NoProfile -ExecutionPolicy Bypass -Command "irm https://raw.githubusercontent.com/aashishraj03/syncclip-releases/main/install.ps1 | iex"</code>
-      <button type="button" class="copy" aria-label="Copy Command Prompt install command">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg>
-        <span>Copy</span>
-      </button>
-    </div>
-
-    <p class="cmd-label">If you opened PowerShell</p>
+    <p class="cmd-label">PowerShell command</p>
     <div class="cmd">
       <code id="win-cmd-ps">irm https://raw.githubusercontent.com/aashishraj03/syncclip-releases/main/install.ps1 | iex</code>
       <button type="button" class="copy" aria-label="Copy PowerShell install command">
@@ -259,22 +249,17 @@
         <span>Copy</span>
       </button>
     </div>
-    <p class="hint">One command installs SyncClip on your PC. Use the command that matches the window you opened.</p>
+    <p class="hint">One command installs SyncClip on your PC. <strong>Caution:</strong> run it in <strong>PowerShell</strong> only. It will not work in Command Prompt (cmd).</p>
 
     <h2>How to install</h2>
     <ol>
       <li>
         <div class="step-text">
-          <p>Press the <strong>Windows key</strong>, type <strong>cmd</strong> or <strong>PowerShell</strong>, and open it.</p>
-          <small>Either one works. A PowerShell window shows <strong>PS</strong> at the start of the line.</small>
+          <p>Press the <strong>Windows key</strong>, type <strong>PowerShell</strong> and open <strong>Windows PowerShell</strong>.</p>
+          <small>The window should show <strong>PS</strong> at the start of the line. Do not use Command Prompt (cmd), because this command will not work there.</small>
         </div>
       </li>
-      <li>
-        <div class="step-text">
-          <p>Copy the command for the window you opened: the first one for <strong>Command Prompt</strong>, the second one for <strong>PowerShell</strong>.</p>
-          <small>Do not paste the PowerShell command into Command Prompt, because it will not work there.</small>
-        </div>
-      </li>
+      <li><div class="step-text"><p>Copy the command above.</p></div></li>
       <li><div class="step-text"><p>Paste the command (right-click or press <strong>Ctrl+V</strong>) and press <strong>Enter</strong>.</p></div></li>
       <li>
         <div class="step-text">
