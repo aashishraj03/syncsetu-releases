@@ -1,14 +1,14 @@
 $ErrorActionPreference = "Stop"
 $ProgressPreference = "SilentlyContinue"
 
-$url = "https://github.com/aashishraj03/syncclip-releases/releases/latest/download/SyncClip-windows.zip"
-$dir = Join-Path $env:LOCALAPPDATA "SyncClip"
-$zip = Join-Path $env:TEMP "SyncClip-windows.zip"
+$url = "https://github.com/aashishraj03/syncsetu-releases/releases/latest/download/SyncSetu-windows.zip"
+$dir = Join-Path $env:LOCALAPPDATA "SyncSetu"
+$zip = Join-Path $env:TEMP "SyncSetu-windows.zip"
 
-Write-Host "Installing SyncClip..."
+Write-Host "Installing SyncSetu..."
 
 # Close a running copy so files can be replaced
-Get-Process SyncClip -ErrorAction SilentlyContinue | Stop-Process -Force
+Get-Process SyncSetu -ErrorAction SilentlyContinue | Stop-Process -Force
 Start-Sleep -Milliseconds 500
 
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
@@ -20,12 +20,12 @@ Remove-Item $zip -Force
 Get-ChildItem $dir -Recurse | Unblock-File
 
 # Start Menu shortcut
-$exe = Join-Path $dir "SyncClip.exe"
+$exe = Join-Path $dir "SyncSetu.exe"
 $shell = New-Object -ComObject WScript.Shell
-$lnk = $shell.CreateShortcut((Join-Path ([Environment]::GetFolderPath("Programs")) "SyncClip.lnk"))
+$lnk = $shell.CreateShortcut((Join-Path ([Environment]::GetFolderPath("Programs")) "SyncSetu.lnk"))
 $lnk.TargetPath = $exe
 $lnk.WorkingDirectory = $dir
 $lnk.Save()
 
 Start-Process $exe
-Write-Host "SyncClip is installed and running. Look for it in the system tray (bottom right)."
+Write-Host "SyncSetu is installed and running. Look for it in the system tray (bottom right)."
