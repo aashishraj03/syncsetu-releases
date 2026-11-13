@@ -101,6 +101,9 @@
   .download:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
   .download svg { width: 26px; height: 26px; flex: none; }
   .hint { color: var(--muted); font-size: 0.95rem; margin: 12px 0 0; text-align: center; }
+  .hint strong { color: var(--ink); }
+  .cmd-label { font-weight: 700; margin: 0 0 8px; }
+  .cmd-label + .cmd { margin-bottom: 20px; }
   h2 { font-size: 1.25rem; margin: 56px 0 8px; }
 
   /* Terminal command box */
@@ -192,6 +195,7 @@
   <div class="toggle" role="tablist" aria-label="Choose your device">
     <button type="button" role="tab" id="tab-android" data-platform="android" aria-controls="panel-android" aria-selected="true">Android</button>
     <button type="button" role="tab" id="tab-mac" data-platform="mac" aria-controls="panel-mac" aria-selected="false" tabindex="-1">Mac</button>
+    <button type="button" role="tab" id="tab-windows" data-platform="windows" aria-controls="panel-windows" aria-selected="false" tabindex="-1">Windows</button>
   </div>
 
   <!-- ANDROID -->
@@ -235,6 +239,51 @@
       <li><div class="step-text"><p>Open SyncClip and start a new connection with a code or QR to share your clipboard.</p></div></li>
     </ol>
   </section>
+
+  <!-- WINDOWS -->
+  <section id="panel-windows" role="tabpanel" aria-labelledby="tab-windows" data-panel="windows" hidden>
+    <p class="cmd-label">If you opened Command Prompt (cmd)</p>
+    <div class="cmd">
+      <code id="win-cmd-cmd">powershell -NoProfile -ExecutionPolicy Bypass -Command "irm https://raw.githubusercontent.com/aashishraj03/syncclip-releases/main/install.ps1 | iex"</code>
+      <button type="button" class="copy" aria-label="Copy Command Prompt install command">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg>
+        <span>Copy</span>
+      </button>
+    </div>
+
+    <p class="cmd-label">If you opened PowerShell</p>
+    <div class="cmd">
+      <code id="win-cmd-ps">irm https://raw.githubusercontent.com/aashishraj03/syncclip-releases/main/install.ps1 | iex</code>
+      <button type="button" class="copy" aria-label="Copy PowerShell install command">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg>
+        <span>Copy</span>
+      </button>
+    </div>
+    <p class="hint">One command installs SyncClip on your PC. Use the command that matches the window you opened.</p>
+
+    <h2>How to install</h2>
+    <ol>
+      <li>
+        <div class="step-text">
+          <p>Press the <strong>Windows key</strong>, type <strong>cmd</strong> or <strong>PowerShell</strong>, and open it.</p>
+          <small>Either one works. A PowerShell window shows <strong>PS</strong> at the start of the line.</small>
+        </div>
+      </li>
+      <li>
+        <div class="step-text">
+          <p>Copy the command for the window you opened: the first one for <strong>Command Prompt</strong>, the second one for <strong>PowerShell</strong>.</p>
+          <small>Do not paste the PowerShell command into Command Prompt, because it will not work there.</small>
+        </div>
+      </li>
+      <li><div class="step-text"><p>Paste the command (right-click or press <strong>Ctrl+V</strong>) and press <strong>Enter</strong>.</p></div></li>
+      <li>
+        <div class="step-text">
+          <p>When it finishes, find the SyncClip icon in the system tray at the bottom right and start a new connection with a code or QR to share your clipboard.</p>
+          <small>If you don't see the icon, click the small arrow next to the tray icons.</small>
+        </div>
+      </li>
+    </ol>
+  </section>
 </main>
 
 <script>
@@ -266,24 +315,12 @@
     });
   });
 
-  // Android is the default; /#mac opens the Mac view directly
+  // Android is the default; /#mac or /#windows opens that view directly
   if (location.hash === '#mac') show('mac');
+  if (location.hash === '#windows') show('windows');
 
-  // Copy button
-  var btn = document.getElementById('copy-btn');
-  var label = document.getElementById('copy-label');
-  var cmd = document.getElementById('mac-cmd');
-
-  function flash() {
-    btn.classList.add('done');
-    label.textContent = 'Copied';
-    setTimeout(function () {
-      btn.classList.remove('done');
-      label.textContent = 'Copy';
-    }, 2000);
-  }
-
-  function fallbackCopy(text) {
+  // Copy buttons (Mac and Windows)
+  function fallbackCopy(text, done) {
     var ta = document.createElement('textarea');
     ta.value = text;
     ta.setAttribute('readonly', '');
@@ -291,17 +328,32 @@
     ta.style.opacity = '0';
     document.body.appendChild(ta);
     ta.select();
-    try { document.execCommand('copy'); flash(); } catch (e) {}
+    try { document.execCommand('copy'); done(); } catch (e) {}
     document.body.removeChild(ta);
   }
 
-  btn.addEventListener('click', function () {
-    var text = cmd.textContent.trim();
-    if (navigator.clipboard && window.isSecureContext) {
-      navigator.clipboard.writeText(text).then(flash, function () { fallbackCopy(text); });
-    } else {
-      fallbackCopy(text);
+  Array.prototype.slice.call(document.querySelectorAll('.cmd')).forEach(function (box) {
+    var btn = box.querySelector('.copy');
+    var label = btn.querySelector('span');
+    var cmd = box.querySelector('code');
+
+    function flash() {
+      btn.classList.add('done');
+      label.textContent = 'Copied';
+      setTimeout(function () {
+        btn.classList.remove('done');
+        label.textContent = 'Copy';
+      }, 2000);
     }
+
+    btn.addEventListener('click', function () {
+      var text = cmd.textContent.trim();
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(flash, function () { fallbackCopy(text, flash); });
+      } else {
+        fallbackCopy(text, flash);
+      }
+    });
   });
 })();
 </script>
