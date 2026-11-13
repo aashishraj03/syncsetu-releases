@@ -1,10 +1,10 @@
 #!/bin/bash
 # SyncClip installer for macOS
-# Usage: curl -fsSL https://raw.githubusercontent.com/aashishraj03/syncclip-releases/main/install.sh | bash
+# Usage: curl -fsSL https://raw.githubusercontent.com/aashishraj03/syncsetu-releases/main/install.sh | bash
 
 set -euo pipefail
 
-REPO="aashishraj03/syncclip-releases"
+REPO="aashishraj03/syncsetu-releases"
 APP="SyncClip"
 
 if [ "$(uname -s)" != "Darwin" ]; then
