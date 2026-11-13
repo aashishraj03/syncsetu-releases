@@ -1,11 +1,11 @@
 #!/bin/bash
-# SyncClip installer for macOS
+# SyncSetu installer for macOS
 # Usage: curl -fsSL https://raw.githubusercontent.com/aashishraj03/syncsetu-releases/main/install.sh | bash
 
 set -euo pipefail
 
 REPO="aashishraj03/syncsetu-releases"
-APP="SyncClip"
+APP="SyncSetu"
 
 if [ "$(uname -s)" != "Darwin" ]; then
   echo "This installer is for macOS only."
