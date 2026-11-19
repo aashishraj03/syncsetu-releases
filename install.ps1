@@ -24,7 +24,7 @@ $exe = Join-Path $dir "SyncSetu.exe"
 $shell = New-Object -ComObject WScript.Shell
 $lnk = $shell.CreateShortcut((Join-Path ([Environment]::GetFolderPath("Programs")) "SyncSetu.lnk"))
 $lnk.TargetPath = $exe
-$lnk.WorkingDirectory = $dir
+$lnk.WorkingDirectory = Split-Path $exe
 $lnk.Save()
 
 Start-Process $exe
