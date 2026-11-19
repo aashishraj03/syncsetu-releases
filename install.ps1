@@ -20,7 +20,7 @@ Remove-Item $zip -Force
 Get-ChildItem $dir -Recurse | Unblock-File
 
 # Start Menu shortcut
-$exe = Join-Path $dir "SyncSetu.exe"
+$exe = (Get-ChildItem $dir -Recurse -Filter "SyncSetu.exe" | Select-Object -First 1).FullName
 $shell = New-Object -ComObject WScript.Shell
 $lnk = $shell.CreateShortcut((Join-Path ([Environment]::GetFolderPath("Programs")) "SyncSetu.lnk"))
 $lnk.TargetPath = $exe
